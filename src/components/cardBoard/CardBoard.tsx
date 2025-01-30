@@ -1,10 +1,11 @@
 import { Smile, Frown, Flag, Laugh } from 'lucide-react';
 import clsx from 'clsx';
 import React, { useState, useMemo, useEffect } from 'react';
-import { createBoard } from '../../utils.ts';
+import { createBoard } from '../../utils/createBoard.ts';
 import styles from './cardBoard.module.css';
 import { BoardCell } from '../../types';
 import Confetti from 'react-confetti';
+import { checkIfWin } from '../../utils/checkIfWin.ts';
 
 interface Props {
   board: BoardCell[][];
@@ -28,7 +29,6 @@ export const CardBoard: React.FC<Props> = ({ board, setBoard }) => {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [time, setTime] = useState(+new Date());
   const [isRunning, setIsRunning] = useState(false);
-  console.log(isVictory);
 
   const height = board.length;
   const width = board[0].length;
@@ -52,11 +52,14 @@ export const CardBoard: React.FC<Props> = ({ board, setBoard }) => {
       setIsRunning(false);
       setIsVictory(false);
     }
-    if (height * width - revealed === mines) {
+  }, [revealed]);
+
+  useEffect(() => {
+    if (checkIfWin(board)) {
       setIsVictory(true);
       setIsRunning(false);
     }
-  }, [height, mines, revealed, width]);
+  }, [board]);
 
   useEffect(() => {
     let timer: number;

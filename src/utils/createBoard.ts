@@ -1,4 +1,4 @@
-import { BoardCell } from './types';
+import { BoardCell } from '../types';
 
 export function createBoard(
   rows: number,

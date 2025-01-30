@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { CardBoard } from './components/cardBoard/CardBoard.tsx';
 import { GameSettings } from './components/gameSettings/GameSettings.tsx';
-import { createBoard } from './utils.ts';
+import { createBoard } from './utils/createBoard.ts';
 
 function App() {
   const [board, setBoard] = useState(() => createBoard(9, 9, 10));

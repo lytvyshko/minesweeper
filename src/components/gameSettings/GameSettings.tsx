@@ -2,7 +2,7 @@ import { X } from 'lucide-react';
 import { useState } from 'react';
 import styles from './gameSettings.module.css';
 import { BoardCell } from '../../types';
-import { createBoard } from '../../utils.ts';
+import { createBoard } from '../../utils/createBoard.ts';
 
 interface Props {
   setBoard: (board: BoardCell[][]) => void;
