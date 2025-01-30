@@ -4,7 +4,22 @@
 
 .header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  padding: 0 10px;
+}
+
+.minesCount,
+.clock {
+  color: red;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.resetBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .boardCell {
