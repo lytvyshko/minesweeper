@@ -1,5 +1,5 @@
 export interface BoardCell {
-  value: number | string;
+  value: number | '💣';
   revealed: boolean;
   flagged: boolean;
 }

@@ -5,9 +5,13 @@ export function createBoard(
   cols: number,
   mines: number
 ): BoardCell[][] {
-  const board = Array(rows)
-    .fill()
-    .map(() => Array(cols).fill({ value: 0, revealed: false, flagged: false }));
+  const board: BoardCell[][] = Array.from({ length: rows }, () =>
+    Array.from({ length: cols }, () => ({
+      value: 0,
+      revealed: false,
+      flagged: false,
+    }))
+  );
 
   let mineCount = 0;
   while (mineCount < mines) {
