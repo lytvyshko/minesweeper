@@ -3,9 +3,10 @@ import clsx from 'clsx';
 import React, { useState, useMemo, useEffect } from 'react';
 import { createBoard } from '../../utils/createBoard.ts';
 import styles from './cardBoard.module.css';
-import { BoardCell } from '../../types';
+import { BoardCell, CellCoords } from '../../types';
 import Confetti from 'react-confetti';
 import { checkIfWin } from '../../utils/checkIfWin.ts';
+import { revealAllBombs } from '../../utils/revealAllBombs.ts';
 
 interface Props {
   board: BoardCell[][];
@@ -25,6 +26,8 @@ enum Colors {
 
 export const CardBoard: React.FC<Props> = ({ board, setBoard }) => {
   const [gameOver, setGameOver] = useState(false);
+  const [revealedBombCoords, setRevealedBombCoords] =
+    useState<CellCoords | null>(null);
   const [isVictory, setIsVictory] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [time, setTime] = useState(+new Date());
@@ -49,17 +52,17 @@ export const CardBoard: React.FC<Props> = ({ board, setBoard }) => {
 
   useEffect(() => {
     if (revealed === 0) {
+      setRevealedBombCoords(null);
       setIsRunning(false);
       setIsVictory(false);
+      setGameOver(false);
     }
-  }, [revealed]);
 
-  useEffect(() => {
     if (checkIfWin(board)) {
       setIsVictory(true);
       setIsRunning(false);
     }
-  }, [board]);
+  }, [board, revealed]);
 
   useEffect(() => {
     let timer: number;
@@ -76,6 +79,7 @@ export const CardBoard: React.FC<Props> = ({ board, setBoard }) => {
     setGameOver(false);
     setIsVictory(false);
     setStartTime(null);
+    setRevealedBombCoords(null);
   };
 
   const markFlagged = (rowIndex: number, colIndex: number) => {
@@ -110,12 +114,14 @@ export const CardBoard: React.FC<Props> = ({ board, setBoard }) => {
       return;
     }
 
+    let newBoard = board.map((row) => row.map((cell) => ({ ...cell })));
+
     if (board[rowIndex][colIndex].value === '💣') {
+      newBoard = revealAllBombs(newBoard);
+      setRevealedBombCoords({ x: rowIndex, y: colIndex });
       setGameOver(true);
       setIsRunning(false);
     }
-
-    const newBoard = board.map((row) => row.map((cell) => ({ ...cell })));
 
     const floodFill = (rowIndex: number, colIndex: number) => {
       if (
@@ -182,7 +188,10 @@ export const CardBoard: React.FC<Props> = ({ board, setBoard }) => {
             <button
               className={clsx(
                 styles.boardCell,
-                cell.revealed && styles.revealedCell
+                cell.revealed && styles.revealedCell,
+                revealedBombCoords?.x === rowIndex &&
+                  revealedBombCoords?.y === cellIndex &&
+                  styles.revealedBomb
               )}
               style={
                 typeof cell.value === 'number'

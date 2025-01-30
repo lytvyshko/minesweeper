@@ -37,6 +37,10 @@
   font-size: 14px;
 }
 
+.revealedBomb {
+  background-color: crimson;
+}
+
 .revealedCell:disabled {
   color: black;
 }

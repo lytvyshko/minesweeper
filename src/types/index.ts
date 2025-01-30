@@ -3,3 +3,8 @@ export interface BoardCell {
   revealed: boolean;
   flagged: boolean;
 }
+
+export interface CellCoords {
+  x: number;
+  y: number;
+}
