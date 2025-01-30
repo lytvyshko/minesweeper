@@ -4,7 +4,7 @@ import { GameSettings } from './components/gameSettings/GameSettings.tsx';
 import { createBoard } from './utils.ts';
 
 function App() {
-  const [board, setBoard] = useState(() => createBoard(8, 8, 4));
+  const [board, setBoard] = useState(() => createBoard(9, 9, 10));
   const [showSettings, setShowSettings] = useState(false);
   return (
     <>
